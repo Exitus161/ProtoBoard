@@ -3,6 +3,7 @@ package controller;
 import model.CheckboxTodoList;
 import model.TodoApp;
 import model.TodoItem;
+import model.TodoList;
 
 /**
  * Controller verbindet GUI mit Model.
@@ -23,14 +24,14 @@ public class TodoController {
     /**
      * Fügt eine neue Liste hinzu
      */
-    public void addList(CheckboxTodoList list) {
+    public void addList(TodoList list) {
         app.addList(list);
     }
 
     /**
      * Entfernt eine Liste
      */
-    public void removeList(CheckboxTodoList list) {
+    public void removeList(TodoList list) {
         app.removeList(list);
     }
 

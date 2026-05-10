@@ -1,6 +1,7 @@
 package view;
 
 import controller.TodoController;
+import model.TextTodoList;
 import model.CheckboxTodoList;
 import model.TodoApp;
 import model.TodoItem;
@@ -18,7 +19,7 @@ public class GUI {
     private TodoApp app;
 
     // Aktuell ausgewählte Liste
-    private CheckboxTodoList currentList;
+    private TodoList currentList;
 
     // Swing Komponenten
     private JFrame frame;
@@ -101,11 +102,8 @@ public class GUI {
 
                     TodoList selectedList = app.getLists().get(selectedIndex);
 
-                    // Nur CheckboxListen behandeln
-                    if (selectedList instanceof CheckboxTodoList) {
-                        currentList = (CheckboxTodoList) selectedList;
-                        refreshTodoPanel();
-                    }
+                    currentList = selectedList;
+                    refreshTodoPanel();
                 }
             }
         });
@@ -129,14 +127,40 @@ public class GUI {
 
         String title = JOptionPane.showInputDialog("Name der Liste:");
 
-        if (title != null && !title.isEmpty()) {
-
-            CheckboxTodoList newList = new CheckboxTodoList(title);
-
-            controller.addList(newList);
-
-            refreshListOverview();
+        if (title == null || title.isEmpty()) {
+            return;
         }
+
+        // Auswahl des Listentyps
+        String[] options = {"Checkbox List", "Text List"};
+
+        int choice = JOptionPane.showOptionDialog(
+                frame,
+                "Welchen Listentyp erstellen?",
+                "Neue Liste",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        TodoList newList;
+
+        // Checkbox-Liste
+        if (choice == 0) {
+
+            newList = new CheckboxTodoList(title);
+
+        } else {
+
+            // Freitext-Liste
+            newList = new TextTodoList(title);
+        }
+
+        controller.addList(newList);
+
+        refreshListOverview();
     }
 
     /**
@@ -148,14 +172,31 @@ public class GUI {
             return;
         }
 
-        String text = JOptionPane.showInputDialog("Neue Aufgabe:");
+        String text = JOptionPane.showInputDialog("Neuer Eintrag:");
 
-        if (text != null && !text.isEmpty()) {
-
-            controller.addItem(currentList, text);
-
-            refreshTodoPanel();
+        if (text == null || text.isEmpty()) {
+            return;
         }
+
+        // -----------------------------------
+        // Checkbox-Liste
+        // -----------------------------------
+
+        if (currentList instanceof CheckboxTodoList checkboxList) {
+
+            controller.addItem(checkboxList, text);
+        }
+
+        // -----------------------------------
+        // Text-Liste
+        // -----------------------------------
+
+        else if (currentList instanceof TextTodoList textList) {
+
+            textList.addEntry(text);
+        }
+
+        refreshTodoPanel();
     }
 
     /**
@@ -177,9 +218,20 @@ public class GUI {
 
         todoPanel.removeAll();
 
-        if (currentList != null) {
+        if (currentList == null) {
 
-            for (TodoItem item : currentList.getItems()) {
+            todoPanel.revalidate();
+            todoPanel.repaint();
+            return;
+        }
+
+        // -----------------------------------
+        // Checkbox-Liste anzeigen
+        // -----------------------------------
+
+        if (currentList instanceof CheckboxTodoList checkboxList) {
+
+            for (TodoItem item : checkboxList.getItems()) {
 
                 JCheckBox checkBox = new JCheckBox(item.getText());
 
@@ -187,7 +239,9 @@ public class GUI {
 
                 // Checkbox Event
                 checkBox.addActionListener(e -> {
-                    controller.toggleItem(currentList, item);
+
+                    controller.toggleItem(checkboxList, item);
+
                     refreshTodoPanel();
                 });
 
@@ -195,7 +249,22 @@ public class GUI {
             }
         }
 
+        // -----------------------------------
+        // Text-Liste anzeigen
+        // -----------------------------------
+
+        else if (currentList instanceof TextTodoList textList) {
+
+            for (String entry : textList.getEntries()) {
+
+                JLabel label = new JLabel(entry);
+
+                todoPanel.add(label);
+            }
+        }
+
         todoPanel.revalidate();
         todoPanel.repaint();
     }
+
 }

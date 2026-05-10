@@ -9,7 +9,7 @@ import java.util.List;
 public class TodoApp {
 
     // Alle vorhandenen Listen
-    private List<CheckboxTodoList> lists;
+    private List<TodoList> lists;
 
     /**
      * Konstruktor: initialisiert leere Liste
@@ -21,21 +21,21 @@ public class TodoApp {
     /**
      * Fügt eine neue Liste hinzu
      */
-    public void addList(CheckboxTodoList list) {
+    public void addList(TodoList list) {
         lists.add(list);
     }
 
     /**
      * Entfernt eine Liste
      */
-    public void removeList(CheckboxTodoList list) {
+    public void removeList(TodoList list) {
         lists.remove(list);
     }
 
     /**
      * Gibt alle Listen zurück
      */
-    public List<CheckboxTodoList> getLists() {
+    public List<TodoList> getLists() {
         return lists;
     }
 }

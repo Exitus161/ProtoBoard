@@ -1,37 +1,51 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Todo-Liste als einfacher Fließtext.
+ * Todo-Liste für einfache Freitext-Einträge.
+ * Diese Liste besitzt keine Checkboxen.
  */
 public class TextTodoList extends TodoList {
 
-    // Inhalt der Liste
-    private String content;
+    // Liste aller Textelemente
+    private List<String> entries;
 
     /**
-     * Konstruktor
+     * Konstruktor erstellt eine neue Freitext-Liste.
      */
     public TextTodoList(String title) {
         super(title);
-        this.content = "";
+        entries = new ArrayList<>();
     }
 
+    /**
+     * Gibt den Typ der Liste zurück.
+     */
     @Override
     public String getType() {
         return "text";
     }
 
     /**
-     * Gibt den Inhalt zurück
+     * Gibt alle Einträge zurück.
      */
-    public String getContent() {
-        return content;
+    public List<String> getEntries() {
+        return entries;
     }
 
     /**
-     * Setzt den Inhalt der Liste
+     * Fügt einen neuen Eintrag hinzu.
      */
-    public void setContent(String content) {
-        this.content = content;
+    public void addEntry(String entry) {
+        entries.add(entry);
+    }
+
+    /**
+     * Entfernt einen Eintrag.
+     */
+    public void removeEntry(String entry) {
+        entries.remove(entry);
     }
 }
