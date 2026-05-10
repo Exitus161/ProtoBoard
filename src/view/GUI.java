@@ -259,6 +259,10 @@ public class GUI {
 
         if (currentList instanceof CheckboxTodoList checkboxList) {
 
+            // Layout für Checkbox-Liste zurücksetzen
+            todoPanel.removeAll();
+            todoPanel.setLayout(new BoxLayout(todoPanel, BoxLayout.Y_AXIS));
+
             for (TodoItem item : checkboxList.getItems()) {
 
                 JCheckBox checkBox = new JCheckBox(item.getText());
