@@ -16,16 +16,16 @@ public class TextTodoList extends TodoList {
      * Konstruktor erstellt eine neue Freitext-Liste.
      */
     public TextTodoList(String title) {
-        super(title);
+        super(title, "text");
         entries = new ArrayList<>();
     }
 
     /**
-     * Gibt den Typ der Liste zurück.
+     * Leerer Konstruktor für Gson
      */
-    @Override
-    public String getType() {
-        return "text";
+    public TextTodoList() {
+        super("", "text");
+        entries = new ArrayList<>();
     }
 
     /**

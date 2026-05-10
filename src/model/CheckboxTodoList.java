@@ -16,7 +16,7 @@ public class CheckboxTodoList extends TodoList {
      * Konstruktor: erstellt leere Liste
      */
     public CheckboxTodoList(String title) {
-        super(title);
+        super(title, "checkbox");
         this.items = new ArrayList<>();
     }
 
@@ -24,7 +24,7 @@ public class CheckboxTodoList extends TodoList {
      * Leerer Konstruktor für Gson
      */
     public CheckboxTodoList() {
-        super("");
+        super("", "checkbox");
         this.items = new ArrayList<>();
     }
 
@@ -51,14 +51,6 @@ public class CheckboxTodoList extends TodoList {
      */
     private void sortItems() {
         items.sort(Comparator.comparing(TodoItem::isCompleted));
-    }
-
-    /**
-     * Gibt den Typ der Liste zurück.
-     */
-    @Override
-    public String getType() {
-        return "checkbox";
     }
 
     /**

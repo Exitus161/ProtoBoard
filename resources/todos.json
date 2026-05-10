@@ -1,13 +1,23 @@
 {
   "lists": [
     {
+      "entries": [
+        "Das ist der Test für Freitext",
+        "Milch",
+        "Eier",
+        "Wasser"
+      ],
+      "title": "Freitext",
+      "type": "text"
+    },
+    {
       "items": [
         {
-          "text": "Eier",
+          "text": "Wasser",
           "completed": false
         },
         {
-          "text": "Wasser",
+          "text": "Eier",
           "completed": false
         },
         {
@@ -15,15 +25,8 @@
           "completed": true
         }
       ],
-      "title": "Einkauf"
-    },
-    {
-      "items": [],
-      "title": "Uni"
-    },
-    {
-      "items": [],
-      "title": "Wohnung"
+      "title": "Einkaufsliste",
+      "type": "checkbox"
     }
   ]
 }

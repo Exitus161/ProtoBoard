@@ -3,6 +3,7 @@ package controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.TodoApp;
+import model.TodoList;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -25,7 +26,10 @@ public class PersistenceManager {
      */
     public PersistenceManager() {
 
-        gson = new GsonBuilder().setPrettyPrinting().create();
+        gson = new GsonBuilder()
+                .registerTypeAdapter(TodoList.class, new TodoListAdapter())
+                .setPrettyPrinting()
+                .create();
 
         createFileIfNeeded();
     }

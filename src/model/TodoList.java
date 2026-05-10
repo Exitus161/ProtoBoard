@@ -8,12 +8,15 @@ public abstract class TodoList {
 
     // Titel der Liste
     protected String title;
+    // Typ der Liste
+    protected String type;
 
     /**
      * Konstruktor setzt den Titel der Liste
      */
-    public TodoList(String title) {
+    public TodoList(String title, String type) {
         this.title = title;
+        this.type = type;
     }
 
     /**
@@ -25,7 +28,8 @@ public abstract class TodoList {
 
     /**
      * Gibt den Typ der Liste zurück.
-     * Wird von den Unterklassen überschrieben.
      */
-    public abstract String getType();
+    public String getType() {
+        return type;
+    }
 }
