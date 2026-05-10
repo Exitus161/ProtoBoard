@@ -9,6 +9,8 @@ import model.TodoList;
 
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  * Haupt-GUI der Todo-App
@@ -30,6 +32,12 @@ public class GUI {
 
     // Rechte Seite mit TodoItems
     private JPanel todoPanel;
+
+    // Titel der aktuell ausgewählten Liste
+    private JLabel currentListLabel;
+
+    // Eingabefeld für Textlisten
+    private JTextArea textArea;
 
     /**
      * Konstruktor
@@ -75,16 +83,29 @@ public class GUI {
         // RECHTE SEITE (TodoItems)
         // -----------------------------
 
+        // Panel für Inhalte
         todoPanel = new JPanel();
         todoPanel.setLayout(new BoxLayout(todoPanel, BoxLayout.Y_AXIS));
 
         JScrollPane rightScrollPane = new JScrollPane(todoPanel);
 
-        JButton addItemButton = new JButton("Add Todo");
+        // Titel der aktuellen Liste
+        currentListLabel = new JLabel("Keine Liste ausgewählt");
+        currentListLabel.setFont(new Font("Arial", Font.BOLD, 20));
+
+        // Button zum Hinzufügen
+        JButton addItemButton = new JButton("Add Entry");
 
         addItemButton.addActionListener(e -> addNewItem());
 
+        // Oberes Panel mit Titel
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(currentListLabel, BorderLayout.WEST);
+
+        // Rechte Hauptseite
         JPanel rightPanel = new JPanel(new BorderLayout());
+
+        rightPanel.add(topPanel, BorderLayout.NORTH);
         rightPanel.add(rightScrollPane, BorderLayout.CENTER);
         rightPanel.add(addItemButton, BorderLayout.SOUTH);
 
@@ -218,12 +239,19 @@ public class GUI {
 
         todoPanel.removeAll();
 
+        // Keine Liste ausgewählt
         if (currentList == null) {
+
+            currentListLabel.setText("Keine Liste ausgewählt");
 
             todoPanel.revalidate();
             todoPanel.repaint();
+
             return;
         }
+
+        // Titel der aktuellen Liste anzeigen
+        currentListLabel.setText(currentList.getTitle());
 
         // -----------------------------------
         // Checkbox-Liste anzeigen
@@ -255,12 +283,71 @@ public class GUI {
 
         else if (currentList instanceof TextTodoList textList) {
 
+            textArea = new JTextArea();
+
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+
+            // Vorhandene Einträge anzeigen
+            StringBuilder builder = new StringBuilder();
+
             for (String entry : textList.getEntries()) {
-
-                JLabel label = new JLabel(entry);
-
-                todoPanel.add(label);
+                builder.append(entry).append("\n");
             }
+
+            textArea.setText(builder.toString());
+
+            // Änderungen im Textfeld überwachen
+            textArea.getDocument().addDocumentListener(new DocumentListener() {
+
+                /**
+                 * Aktualisiert die Einträge im Model.
+                 */
+                private void updateEntries() {
+
+                    // Gesamten Text holen
+                    String text = textArea.getText();
+
+                    // Nach Zeilen trennen
+                    String[] lines = text.split("\n");
+
+                    // Neue Liste erzeugen
+                    java.util.List<String> entries = new java.util.ArrayList<>();
+
+                    for (String line : lines) {
+
+                        // Leere Zeilen ignorieren
+                        if (!line.trim().isEmpty()) {
+                            entries.add(line);
+                        }
+                    }
+
+                    // Model aktualisieren
+                    textList.setEntries(entries);
+                }
+
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    updateEntries();
+                }
+
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    updateEntries();
+                }
+
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    updateEntries();
+                }
+            });
+
+            JScrollPane textScrollPane = new JScrollPane(textArea);
+
+            textScrollPane.setPreferredSize(new Dimension(400, 400));
+
+            todoPanel.setLayout(new BorderLayout());
+            todoPanel.add(textScrollPane, BorderLayout.CENTER);
         }
 
         todoPanel.revalidate();

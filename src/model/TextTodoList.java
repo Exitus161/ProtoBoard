@@ -48,4 +48,11 @@ public class TextTodoList extends TodoList {
     public void removeEntry(String entry) {
         entries.remove(entry);
     }
+
+    /**
+     * Ersetzt alle Einträge der Liste.
+     */
+    public void setEntries(List<String> entries) {
+        this.entries = entries;
+    }
 }
