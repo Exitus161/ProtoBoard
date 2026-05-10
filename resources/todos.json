@@ -1,3 +1,29 @@
 {
-  "lists": []
+  "lists": [
+    {
+      "entries": [
+        "Das ist die Freitext Box für Notizen"
+      ],
+      "title": "Freitext",
+      "type": "text"
+    },
+    {
+      "items": [
+        {
+          "text": "Eier",
+          "completed": false
+        },
+        {
+          "text": "Wasser",
+          "completed": false
+        },
+        {
+          "text": "Milch",
+          "completed": true
+        }
+      ],
+      "title": "Einkaufsliste",
+      "type": "checkbox"
+    }
+  ]
 }

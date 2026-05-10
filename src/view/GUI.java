@@ -180,6 +180,7 @@ public class GUI {
         }
 
         controller.addList(newList);
+        controller.save();
 
         refreshListOverview();
     }
@@ -216,6 +217,7 @@ public class GUI {
 
             textList.addEntry(text);
         }
+        controller.save();
 
         refreshTodoPanel();
     }
@@ -274,6 +276,8 @@ public class GUI {
 
                     controller.toggleItem(checkboxList, item);
 
+                    controller.save();
+
                     refreshTodoPanel();
                 });
 
@@ -328,6 +332,8 @@ public class GUI {
 
                     // Model aktualisieren
                     textList.setEntries(entries);
+
+                    controller.save();
                 }
 
                 @Override

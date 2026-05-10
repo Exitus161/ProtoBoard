@@ -14,11 +14,15 @@ public class TodoController {
     // Referenz auf die gesamte Anwendung (alle Listen)
     private TodoApp app;
 
+    // Verwaltet Speichern/Laden
+    private PersistenceManager persistenceManager;
+
     /**
      * Konstruktor
      */
-    public TodoController(TodoApp app) {
+    public TodoController(TodoApp app, PersistenceManager persistenceManager) {
         this.app = app;
+        this.persistenceManager = persistenceManager;
     }
 
     /**
@@ -47,6 +51,13 @@ public class TodoController {
      */
     public void toggleItem(CheckboxTodoList list, TodoItem item) {
         list.toggleItem(item);
+    }
+
+    /**
+     * Speichert den aktuellen Stand der App.
+     */
+    public void save() {
+        persistenceManager.save(app);
     }
 
     /**

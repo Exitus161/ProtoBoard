@@ -14,7 +14,7 @@ public class Main {
         TodoApp app = persistence.load();
 
         // Controller erstellen
-        TodoController controller = new TodoController(app);
+        TodoController controller = new TodoController(app, persistence);
 
         // GUI starten
         new GUI(controller);
