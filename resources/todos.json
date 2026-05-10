@@ -1,0 +1,29 @@
+{
+  "lists": [
+    {
+      "items": [
+        {
+          "text": "Eier",
+          "completed": false
+        },
+        {
+          "text": "Wasser",
+          "completed": false
+        },
+        {
+          "text": "Milch",
+          "completed": true
+        }
+      ],
+      "title": "Einkauf"
+    },
+    {
+      "items": [],
+      "title": "Uni"
+    },
+    {
+      "items": [],
+      "title": "Wohnung"
+    }
+  ]
+}
