@@ -153,11 +153,11 @@ public class GUI {
         JScrollPane rightScrollPane = new JScrollPane(todoPanel);
 
         // Titel der aktuellen Liste
-        currentListLabel = new JLabel("Keine Liste ausgewählt");
+        currentListLabel = new JLabel("Choose a List");
         currentListLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
         // Button zum Hinzufügen
-        JButton addItemButton = new JButton("Add Entry");
+        JButton addItemButton = new JButton("Add Task");
 
         addItemButton.addActionListener(e -> addNewItem());
 
