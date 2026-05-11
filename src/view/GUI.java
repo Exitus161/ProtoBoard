@@ -261,11 +261,23 @@ public class GUI {
             newList = new TextTodoList(title);
         }
 
-
+        // Neue Liste über den Controller zum Model hinzufügen.
         controller.addList(newList);
+
+        // Die neu erstellte Liste wird direkt als aktuelle Liste gesetzt.
+        currentList = newList;
+
+        // Den neuen Zustand speichern.
         controller.save();
 
+        // Linke Listenübersicht aktualisieren.
         refreshListOverview();
+
+        // Die neue Liste in der Listenübersicht auswählen.
+        listOverview.setSelectedIndex(app.getLists().indexOf(newList));
+
+        // Rechte Todo-Ansicht aktualisieren.
+        refreshTodoPanel();
     }
 
     /**
