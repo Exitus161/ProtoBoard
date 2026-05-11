@@ -4,6 +4,7 @@ import model.CheckboxTodoList;
 import model.TodoApp;
 import model.TodoItem;
 import model.TodoList;
+import model.TextTodoList;
 
 /**
  * Controller verbindet GUI mit Model.
@@ -70,6 +71,24 @@ public class TodoController {
         // Das Item wird aus der Liste entfernt,
         // zu der es gehört.
         list.getItems().remove(item);
+    }
+
+    /**
+     * Fügt einer Freitext-Liste einen neuen Eintrag hinzu.
+     */
+    public void addTextEntry(TextTodoList list, String text) {
+
+        // Der neue Text wird an die übergebene Freitext-Liste angehängt.
+        list.addEntry(text);
+    }
+
+    /**
+     * Ersetzt alle Einträge einer Freitext-Liste.
+     */
+    public void replaceTextEntries(TextTodoList list, java.util.List<String> entries) {
+
+        // Die vorhandenen Einträge werden durch die neue Liste ersetzt.
+        list.setEntries(entries);
     }
 
     /**

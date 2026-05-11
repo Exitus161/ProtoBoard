@@ -284,8 +284,11 @@ public class GUI {
 
         else if (currentList instanceof TextTodoList textList) {
 
-            textList.addEntry(text);
+            // Die GUI fügt den Eintrag nicht direkt hinzu,
+            // sondern gibt die Aktion an den Controller weiter.
+            controller.addTextEntry(textList, text);
         }
+
         controller.save();
 
         refreshTodoPanel();
@@ -461,7 +464,9 @@ public class GUI {
                     }
 
                     // Model aktualisieren
-                    textList.setEntries(entries);
+                    // Die GUI ersetzt die Einträge nicht direkt,
+                    // sondern gibt die neue Textliste an den Controller weiter.
+                    controller.replaceTextEntries(textList, entries);
 
                     controller.save();
                 }
