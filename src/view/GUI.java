@@ -11,6 +11,9 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 
 /**
  * Haupt-GUI der Todo-App
@@ -63,6 +66,18 @@ public class GUI {
         frame = new JFrame("Todo App");
         frame.setSize(700, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Beim Schließen des Fensters den aktuellen Stand speichern.
+        frame.addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                // Aktuelle Daten vor dem Beenden speichern.
+                controller.save();
+            }
+        });
+
         frame.setLayout(new BorderLayout());
 
         // -----------------------------
