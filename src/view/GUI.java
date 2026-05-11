@@ -501,14 +501,10 @@ public class GUI {
         // Text-Liste
         // -----------------------------------
 
-        else if (currentList instanceof TextTodoList textList) {
+        if (currentList instanceof CheckboxTodoList checkboxList) {
 
-            // Textlisten werden direkt im Textfeld bearbeitet.
-            addItemButton.setEnabled(false);
-
-            // Die GUI fügt den Eintrag nicht direkt hinzu,
-            // sondern gibt die Aktion an den Controller weiter.
-            controller.addTextEntry(textList, text);
+            // Neue Aufgabe über den Controller hinzufügen.
+            controller.addItem(checkboxList, text);
         }
 
         refreshTodoPanel();

@@ -77,8 +77,8 @@ public class PersistenceManager {
 
         } catch (IOException e) {
 
-            // Creating the storage file failed.
-            // The error message is printed to the console.
+            // Erstellen der Speicherdatei ist fehlgeschlagen.
+            // Die Fehlermeldung wird in der Konsole ausgegeben.
             System.err.println("Storage file could not be created.");
             System.err.println("Cause: " + e.getMessage());
         }
@@ -93,22 +93,17 @@ public class PersistenceManager {
 
             gson.toJson(app, writer);
 
-            System.out.println("Todo Data saved.");
+            System.out.println("Todo data saved.");
 
         } catch (IOException e) {
 
-        // Saving failed.
-        // The error message is printed to the console.
+        // Speichern ist fehlgeschlagen.
+        // Die Fehlermeldung wird in der Konsole ausgegeben.
         System.err.println("Todo data could not be saved.");
         System.err.println("Cause: " + e.getMessage());
     }
 }
 
-    /**
-     * Lädt die App-Daten aus der JSON-Datei.
-     * Falls die Datei fehlt, leer oder beschädigt ist,
-     * wird eine neue leere TodoApp zurückgegeben.
-     */
     /**
      * Lädt die App-Daten aus der JSON-Datei.
      * Falls die Datei fehlt, leer oder beschädigt ist,
@@ -133,8 +128,8 @@ public class PersistenceManager {
 
         } catch (IOException | JsonParseException e) {
 
-            // Reading or parsing the file failed.
-            // The app still starts with an empty state.
+            // Lesen oder Umwandeln der Datei ist fehlgeschlagen.
+            // Die App startet trotzdem mit einem leeren Zustand.
             System.err.println("Todo data could not be loaded.");
             System.err.println("Starting with an empty todo app.");
             System.err.println("Cause: " + e.getMessage());
