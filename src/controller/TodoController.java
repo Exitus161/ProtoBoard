@@ -54,6 +54,25 @@ public class TodoController {
     }
 
     /**
+     * Ändert den Text eines bestehenden TodoItems.
+     */
+    public void editItem(TodoItem item, String newText) {
+
+        // Der neue Text wird direkt im vorhandenen Item gespeichert.
+        item.setText(newText);
+    }
+
+    /**
+     * Entfernt ein TodoItem aus einer Checkbox-Liste.
+     */
+    public void removeItem(CheckboxTodoList list, TodoItem item) {
+
+        // Das Item wird aus der Liste entfernt,
+        // zu der es gehört.
+        list.getItems().remove(item);
+    }
+
+    /**
      * Speichert den aktuellen Stand der App.
      */
     public void save() {

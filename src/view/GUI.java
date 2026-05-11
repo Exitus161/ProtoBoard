@@ -379,7 +379,9 @@ public class GUI {
 
                     if (newText != null && !newText.isBlank()) {
 
-                        item.setText(newText);
+                        // Die GUI ändert das Item nicht direkt,
+                        // sondern gibt die Änderung an den Controller weiter.
+                        controller.editItem(item, newText);
 
                         controller.save();
 
@@ -390,7 +392,9 @@ public class GUI {
                 // Delete
                 deleteItem.addActionListener(e -> {
 
-                    checkboxList.getItems().remove(item);
+                    // Die GUI löscht das Item nicht direkt,
+                    // sondern gibt den Löschwunsch an den Controller weiter.
+                    controller.removeItem(checkboxList, item);
 
                     controller.save();
 
