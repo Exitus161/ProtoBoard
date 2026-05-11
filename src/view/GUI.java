@@ -108,9 +108,6 @@ public class GUI {
                     // Rechte Ansicht auf "Keine Liste ausgewählt" zurücksetzen.
                     refreshTodoPanel();
                 }
-
-                // Neuen Zustand speichern.
-                controller.save();
             }
         });
 
@@ -137,8 +134,6 @@ public class GUI {
                     // Die GUI benennt die Liste nicht direkt um,
                     // sondern gibt die Änderung an den Controller weiter.
                     controller.renameList(list, newTitle);
-
-                    controller.save();
 
                     refreshListOverview();
                     refreshTodoPanel();
@@ -328,9 +323,6 @@ public class GUI {
         // Die neu erstellte Liste wird direkt als aktuelle Liste gesetzt.
         currentList = newList;
 
-        // Den neuen Zustand speichern.
-        controller.save();
-
         // Linke Listenübersicht aktualisieren.
         refreshListOverview();
 
@@ -382,8 +374,6 @@ public class GUI {
             // sondern gibt die Aktion an den Controller weiter.
             controller.addTextEntry(textList, text);
         }
-
-        controller.save();
 
         refreshTodoPanel();
     }
@@ -484,8 +474,6 @@ public class GUI {
                         // sondern gibt die Änderung an den Controller weiter.
                         controller.editItem(item, newText);
 
-                        controller.save();
-
                         refreshTodoPanel();
                     }
 
@@ -498,8 +486,6 @@ public class GUI {
                     // sondern gibt den Löschwunsch an den Controller weiter.
                     controller.removeItem(checkboxList, item);
 
-                    controller.save();
-
                     refreshTodoPanel();
                 });
 
@@ -507,8 +493,6 @@ public class GUI {
                 checkBox.addActionListener(e -> {
 
                     controller.toggleItem(checkboxList, item);
-
-                    controller.save();
 
                     refreshTodoPanel();
                 });
