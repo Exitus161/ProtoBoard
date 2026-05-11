@@ -342,6 +342,49 @@ public class GUI {
                     );
                 }
 
+                // --------------------
+                // Rechtsklick
+                // --------------------
+
+                JPopupMenu popupMenu = new JPopupMenu();
+
+                JMenuItem editItem = new JMenuItem("Edit");
+                JMenuItem deleteItem = new JMenuItem("Delete");
+
+                popupMenu.add(editItem);
+                popupMenu.add(deleteItem);
+
+                checkBox.setComponentPopupMenu(popupMenu);
+
+                // Edit
+                editItem.addActionListener(e -> {
+
+                    String newText = JOptionPane.showInputDialog(
+                            frame,
+                            "Task bearbeiten:",
+                            item.getText()
+                    );
+
+                    if (newText != null && !newText.isBlank()) {
+
+                        item.setText(newText);
+
+                        controller.save();
+
+                        refreshTodoPanel();
+                    }
+                });
+
+                // Delete
+                deleteItem.addActionListener(e -> {
+
+                    checkboxList.getItems().remove(item);
+
+                    controller.save();
+
+                    refreshTodoPanel();
+                });
+
                 // Checkbox Event
                 checkBox.addActionListener(e -> {
 
