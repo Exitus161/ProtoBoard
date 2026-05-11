@@ -30,9 +30,25 @@ public class CheckboxTodoList extends TodoList {
     }
 
     /**
+     * Stellt sicher, dass die interne Item-Liste existiert.
+     */
+    private void ensureItemsExist() {
+
+        // Falls die Liste durch fehlerhafte oder unvollständige JSON-Daten fehlt,
+        // wird sie hier neu angelegt.
+        if (items == null) {
+            items = new ArrayList<>();
+        }
+    }
+
+    /**
      * Fügt ein neues TodoItem zur Liste hinzu
      */
     public void addItem(String text) {
+
+        // Sicherstellen, dass die interne Liste existiert.
+        ensureItemsExist();
+
         items.add(0, new TodoItem(text));
     }
 
@@ -50,7 +66,9 @@ public class CheckboxTodoList extends TodoList {
      */
     public void removeItem(TodoItem item) {
 
-        // Das übergebene Item wird aus der internen Liste entfernt.
+        // Sicherstellen, dass die interne Liste existiert.
+        ensureItemsExist();
+
         items.remove(item);
     }
 
@@ -60,16 +78,25 @@ public class CheckboxTodoList extends TodoList {
      * - erledigte Aufgaben unten
      */
     private void sortItems() {
+
+        // Sicherstellen, dass die interne Liste existiert.
+        ensureItemsExist();
+
         items.sort(Comparator.comparing(TodoItem::isCompleted));
     }
+
 
     /**
      * Gibt alle Items zurück (für Anzeige)
      */
     public List<TodoItem> getItems() {
 
+        // Sicherstellen, dass die interne Liste existiert.
+        ensureItemsExist();
+
         // Gibt eine nicht direkt veränderbare Sicht auf die Items zurück.
         // Änderungen sollen über Methoden dieser Klasse passieren.
         return Collections.unmodifiableList(items);
     }
+
 }
