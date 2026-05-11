@@ -352,59 +352,7 @@ public class GUI {
                     refreshTodoPanel();
                 });
 
-                JPanel itemPanel = new JPanel(new BorderLayout());
-
-                // Rechte Button-Leiste
-                JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-                JButton editButton = new JButton("Edit");
-                JButton deleteButton = new JButton("Delete");
-
-                // -----------------------------
-                // DELETE
-                // -----------------------------
-
-                deleteButton.addActionListener(e -> {
-
-                    checkboxList.getItems().remove(item);
-
-                    controller.save();
-
-                    refreshTodoPanel();
-                });
-
-                // -----------------------------
-                // EDIT
-                // -----------------------------
-
-                editButton.addActionListener(e -> {
-
-                    String newText = JOptionPane.showInputDialog(
-                            frame,
-                            "Task bearbeiten:",
-                            item.getText()
-                    );
-
-                    if (newText != null && !newText.isBlank()) {
-
-                        item.setText(newText);
-
-                        controller.save();
-
-                        refreshTodoPanel();
-                    }
-                });
-
-                buttonPanel.add(editButton);
-                buttonPanel.add(deleteButton);
-
-                itemPanel.add(checkBox, BorderLayout.CENTER);
-                itemPanel.add(buttonPanel, BorderLayout.EAST);
-
-                // Abstand unten
-                itemPanel.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
-
-                todoPanel.add(itemPanel);
+                todoPanel.add(checkBox);
             }
         }
 
