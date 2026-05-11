@@ -41,6 +41,15 @@ public class TodoController {
     }
 
     /**
+     * Ändert den Titel einer bestehenden Todo-Liste.
+     */
+    public void renameList(TodoList list, String newTitle) {
+
+        // Der neue Titel wird direkt in der übergebenen Liste gespeichert.
+        list.setTitle(newTitle);
+    }
+
+    /**
      * Fügt ein Item zu einer Checkbox-Liste hinzu
      */
     public void addItem(CheckboxTodoList list, String text) {

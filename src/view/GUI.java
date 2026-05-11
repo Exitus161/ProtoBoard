@@ -107,7 +107,13 @@ public class GUI {
 
                 if (newTitle != null && !newTitle.isBlank()) {
 
-                    list.setTitle(newTitle);
+                    // Leerzeichen am Anfang und Ende entfernen,
+                    // damit der neue Listenname sauber gespeichert wird.
+                    newTitle = newTitle.trim();
+
+                    // Die GUI benennt die Liste nicht direkt um,
+                    // sondern gibt die Änderung an den Controller weiter.
+                    controller.renameList(list, newTitle);
 
                     controller.save();
 
@@ -211,6 +217,9 @@ public class GUI {
             return;
         }
 
+        // Leerzeichen am Anfang und Ende entfernen,
+        // damit der Listenname sauber gespeichert wird.
+        title = title.trim();
 
         // Auswahl des Listentyps
         String[] options = {"Checkbox List", "Text List"};
