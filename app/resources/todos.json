@@ -1,32 +1,22 @@
 {
   "lists": [
     {
-      "entries": [
-        "TESTTESTTESET"
-      ],
-      "title": "Test",
+      "entries": [],
+      "title": "Freitext",
       "type": "text"
     },
     {
       "items": [
         {
-          "text": "Bier",
-          "completed": false
-        },
-        {
           "text": "Wasser",
           "completed": false
         },
         {
-          "text": "Milch",
-          "completed": true
-        },
-        {
-          "text": "Eier",
+          "text": "Süßigkeiten",
           "completed": true
         }
       ],
-      "title": "einkaufsliste",
+      "title": "Einkaufsliste",
       "type": "checkbox"
     }
   ]
