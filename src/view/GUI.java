@@ -70,6 +70,7 @@ public class GUI {
         JPopupMenu popupMenu = new JPopupMenu();
 
         JMenuItem deleteItem = new JMenuItem("Delete List");
+        JMenuItem renameItem = new JMenuItem("Rename List");
 
         deleteItem.addActionListener(e -> {
 
@@ -90,7 +91,34 @@ public class GUI {
             }
         });
 
+        renameItem.addActionListener(e -> {
+
+            int selectedIndex = listOverview.getSelectedIndex();
+
+            if (selectedIndex >= 0) {
+
+                TodoList list = app.getLists().get(selectedIndex);
+
+                String newTitle = JOptionPane.showInputDialog(
+                        frame,
+                        "Neuer Listenname:",
+                        list.getTitle()
+                );
+
+                if (newTitle != null && !newTitle.isBlank()) {
+
+                    list.setTitle(newTitle);
+
+                    controller.save();
+
+                    refreshListOverview();
+                    refreshTodoPanel();
+                }
+            }
+        });
+
         popupMenu.add(deleteItem);
+        popupMenu.add(renameItem);
 
         // Rechtsklick aktivieren
         listOverview.setComponentPopupMenu(popupMenu);
@@ -324,7 +352,59 @@ public class GUI {
                     refreshTodoPanel();
                 });
 
-                todoPanel.add(checkBox);
+                JPanel itemPanel = new JPanel(new BorderLayout());
+
+                // Rechte Button-Leiste
+                JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+                JButton editButton = new JButton("Edit");
+                JButton deleteButton = new JButton("Delete");
+
+                // -----------------------------
+                // DELETE
+                // -----------------------------
+
+                deleteButton.addActionListener(e -> {
+
+                    checkboxList.getItems().remove(item);
+
+                    controller.save();
+
+                    refreshTodoPanel();
+                });
+
+                // -----------------------------
+                // EDIT
+                // -----------------------------
+
+                editButton.addActionListener(e -> {
+
+                    String newText = JOptionPane.showInputDialog(
+                            frame,
+                            "Task bearbeiten:",
+                            item.getText()
+                    );
+
+                    if (newText != null && !newText.isBlank()) {
+
+                        item.setText(newText);
+
+                        controller.save();
+
+                        refreshTodoPanel();
+                    }
+                });
+
+                buttonPanel.add(editButton);
+                buttonPanel.add(deleteButton);
+
+                itemPanel.add(checkBox, BorderLayout.CENTER);
+                itemPanel.add(buttonPanel, BorderLayout.EAST);
+
+                // Abstand unten
+                itemPanel.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
+
+                todoPanel.add(itemPanel);
             }
         }
 

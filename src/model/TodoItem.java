@@ -34,6 +34,10 @@ public class TodoItem {
         return text;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
     /**
      * Gibt zurück, ob die Aufgabe erledigt ist
      */
