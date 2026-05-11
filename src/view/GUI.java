@@ -101,7 +101,7 @@ public class GUI {
 
                 String newTitle = JOptionPane.showInputDialog(
                         frame,
-                        "Neuer Listenname:",
+                        "New List:",
                         list.getTitle()
                 );
 
@@ -209,7 +209,7 @@ public class GUI {
      */
     private void createNewList() {
 
-        String title = JOptionPane.showInputDialog("Name der Liste:");
+        String title = JOptionPane.showInputDialog("List name:");
 
         // Wenn der Benutzer abbricht oder nur Leerzeichen eingibt,
         // wird keine Liste erstellt.
@@ -226,8 +226,8 @@ public class GUI {
 
         int choice = JOptionPane.showOptionDialog(
                 frame,
-                "Welchen Listentyp erstellen?",
-                "Neue Liste",
+                "Which type of list?",
+                "New list",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
@@ -272,7 +272,7 @@ public class GUI {
             return;
         }
 
-        String text = JOptionPane.showInputDialog("Neuer Eintrag:");
+        String text = JOptionPane.showInputDialog("New task:");
 
         if (text == null || text.isEmpty()) {
             return;
@@ -325,7 +325,7 @@ public class GUI {
         // Keine Liste ausgewählt
         if (currentList == null) {
 
-            currentListLabel.setText("Keine Liste ausgewählt");
+            currentListLabel.setText("No list chosen");
 
             todoPanel.revalidate();
             todoPanel.repaint();
@@ -385,7 +385,7 @@ public class GUI {
 
                     String newText = JOptionPane.showInputDialog(
                             frame,
-                            "Task bearbeiten:",
+                            "Edit task:",
                             item.getText()
                     );
 
