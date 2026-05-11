@@ -82,6 +82,8 @@ public class CheckboxTodoList extends TodoList {
         // Sicherstellen, dass die interne Liste existiert.
         ensureItemsExist();
 
+        // Offene Aufgaben sollen oben stehen,
+        // erledigte Aufgaben darunter.
         items.sort(Comparator.comparing(TodoItem::isCompleted));
     }
 
