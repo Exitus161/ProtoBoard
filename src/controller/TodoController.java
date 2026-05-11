@@ -77,9 +77,8 @@ public class TodoController {
      */
     public void removeItem(CheckboxTodoList list, TodoItem item) {
 
-        // Das Item wird aus der Liste entfernt,
-        // zu der es gehört.
-        list.getItems().remove(item);
+        // Der Controller delegiert das Entfernen an das Model.
+        list.removeItem(item);
     }
 
     /**

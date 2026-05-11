@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * Verwaltet alle Todo-Listen (zentrale Klasse der App).
@@ -36,6 +37,10 @@ public class TodoApp {
      * Gibt alle Listen zurück
      */
     public List<TodoList> getLists() {
-        return lists;
+
+        // Gibt eine nicht direkt veränderbare Sicht auf die Listen zurück.
+        // Änderungen sollen über addList(...) und removeList(...) passieren.
+        return Collections.unmodifiableList(lists);
     }
+
 }

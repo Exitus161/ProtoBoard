@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * Todo-Liste mit Checkboxen (einzelne Items).
@@ -45,6 +46,15 @@ public class CheckboxTodoList extends TodoList {
     }
 
     /**
+     * Entfernt ein TodoItem aus der Liste.
+     */
+    public void removeItem(TodoItem item) {
+
+        // Das übergebene Item wird aus der internen Liste entfernt.
+        items.remove(item);
+    }
+
+    /**
      * Sortiert die Liste:
      * - offene Aufgaben oben
      * - erledigte Aufgaben unten
@@ -57,6 +67,9 @@ public class CheckboxTodoList extends TodoList {
      * Gibt alle Items zurück (für Anzeige)
      */
     public List<TodoItem> getItems() {
-        return items;
+
+        // Gibt eine nicht direkt veränderbare Sicht auf die Items zurück.
+        // Änderungen sollen über Methoden dieser Klasse passieren.
+        return Collections.unmodifiableList(items);
     }
 }

@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * Todo-Liste für einfache Freitext-Einträge.
@@ -32,8 +33,12 @@ public class TextTodoList extends TodoList {
      * Gibt alle Einträge zurück.
      */
     public List<String> getEntries() {
-        return entries;
+
+        // Gibt eine nicht direkt veränderbare Sicht auf die Einträge zurück.
+        // Änderungen sollen über addEntry(...) oder setEntries(...) passieren.
+        return Collections.unmodifiableList(entries);
     }
+
 
     /**
      * Fügt einen neuen Eintrag hinzu.
