@@ -66,6 +66,35 @@ public class GUI {
         listModel = new DefaultListModel<>();
         listOverview = new JList<>(listModel);
 
+        // Rechtsklick-Menü für Listen
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        JMenuItem deleteItem = new JMenuItem("Delete List");
+
+        deleteItem.addActionListener(e -> {
+
+            int selectedIndex = listOverview.getSelectedIndex();
+
+            if (selectedIndex >= 0) {
+
+                TodoList list = app.getLists().get(selectedIndex);
+
+                controller.removeList(list);
+
+                currentList = null;
+
+                refreshListOverview();
+                refreshTodoPanel();
+
+                controller.save();
+            }
+        });
+
+        popupMenu.add(deleteItem);
+
+        // Rechtsklick aktivieren
+        listOverview.setComponentPopupMenu(popupMenu);
+
         JScrollPane leftScrollPane = new JScrollPane(listOverview);
 
         // Button: neue Liste erstellen

@@ -14,8 +14,12 @@
           "completed": false
         },
         {
-          "text": "Wasser",
+          "text": "Bier",
           "completed": false
+        },
+        {
+          "text": "Wasser",
+          "completed": true
         },
         {
           "text": "Milch",
