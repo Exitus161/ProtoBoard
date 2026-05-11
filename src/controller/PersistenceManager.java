@@ -44,21 +44,34 @@ public class PersistenceManager {
 
         try {
 
+            // Dateiobjekt für den Speicherpfad erstellen.
             File file = new File(FILE_PATH);
 
-            // Datei existiert noch nicht
+            // Elternordner der Datei ermitteln.
+            // Bei "resources/todos.json" ist das der Ordner "resources".
+            File parentDirectory = file.getParentFile();
+
+            // Falls der Elternordner existieren sollte, aber noch fehlt,
+            // wird er hier automatisch angelegt.
+            if (parentDirectory != null && !parentDirectory.exists()) {
+                parentDirectory.mkdirs();
+            }
+
+            // Wenn die Datei noch nicht existiert,
+            // wird eine neue Datei mit leerer App-Struktur erstellt.
             if (!file.exists()) {
 
-                // Neue leere Datei erstellen
                 file.createNewFile();
 
-                // Leere Grundstruktur speichern
+                // Leere Grundstruktur speichern.
                 save(new TodoApp());
 
                 System.out.println("Neue JSON-Datei erstellt.");
             }
 
         } catch (IOException e) {
+
+            // Fehler beim Erstellen der Datei ausgeben.
             e.printStackTrace();
         }
     }
