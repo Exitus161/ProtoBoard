@@ -63,9 +63,40 @@ public class GUI {
      */
     private void init() {
 
-        frame = new JFrame("Todo App");
+        createFrame();
+
+        JPanel leftPanel = createLeftPanel();
+        JPanel rightPanel = createRightPanel();
+
+        // LISTENAUSWAHL
+
+        registerListSelectionListener();
+
+        // FRAME ZUSAMMENSETZEN
+
+        frame.add(leftPanel, BorderLayout.WEST);
+        frame.add(rightPanel, BorderLayout.CENTER);
+
+        // Linke Listenübersicht aktualisieren.
+        refreshListOverview();
+
+        // Passenden Startzustand anzeigen.
+        selectFirstListIfAvailable();
+
+        // Fenster mittig auf dem Bildschirm platzieren.
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    /**
+     * Erstellt und konfiguriert das Hauptfenster.
+     */
+    private void createFrame() {
+
+        frame = new JFrame("ProtoBoard");
         frame.setSize(700, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
 
         // Beim Schließen des Fensters den aktuellen Stand speichern.
         frame.addWindowListener(new WindowAdapter() {
@@ -77,112 +108,18 @@ public class GUI {
                 controller.save();
             }
         });
+    }
 
-        frame.setLayout(new BorderLayout());
-
-        // -----------------------------
-        // LINKE SEITE (Listenübersicht)
-        // -----------------------------
+    /**
+     * Erstellt die linke Seitenleiste mit Listenübersicht und Erstellen-Button.
+     */
+    private JPanel createLeftPanel() {
 
         listModel = new DefaultListModel<>();
         listOverview = new JList<>(listModel);
 
-        // Rechtsklick-Menü für Listen
-        JPopupMenu popupMenu = new JPopupMenu();
-
-        JMenuItem deleteItem = new JMenuItem("Delete List");
-        JMenuItem renameItem = new JMenuItem("Rename List");
-
-        deleteItem.addActionListener(e -> {
-
-            int selectedIndex = listOverview.getSelectedIndex();
-
-            if (selectedIndex >= 0) {
-
-                // Die aktuell ausgewählte Liste wird anhand des Index geholt.
-                TodoList list = app.getLists().get(selectedIndex);
-
-                // Vor dem Löschen nachfragen, damit Listen nicht versehentlich entfernt werden.
-                int confirm = JOptionPane.showConfirmDialog(
-                        frame,
-                        "Delete list \"" + list.getTitle() + "\"?",
-                        "Delete List",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.WARNING_MESSAGE
-                );
-
-                // Wenn der Benutzer nicht bestätigt,
-                // wird die Liste nicht gelöscht.
-                if (confirm != JOptionPane.YES_OPTION) {
-                    return;
-                }
-
-                // Die Liste wird über den Controller entfernt.
-                controller.removeList(list);
-
-                // Linke Listenübersicht nach dem Löschen aktualisieren.
-                refreshListOverview();
-
-                // Wenn nach dem Löschen noch Listen vorhanden sind,
-                // wird automatisch eine sinnvolle nächste Liste ausgewählt.
-                if (!app.getLists().isEmpty()) {
-
-                    // Wenn die letzte Liste gelöscht wurde,
-                    // nehmen wir den neuen letzten Index.
-                    int nextIndex = Math.min(selectedIndex, app.getLists().size() - 1);
-
-                    // Die nächste Liste wird links ausgewählt.
-                    // Dadurch wird auch der ListSelectionListener ausgelöst.
-                    listOverview.setSelectedIndex(nextIndex);
-
-                } else {
-
-                    // Wenn keine Liste mehr vorhanden ist,
-                    // gibt es auch keine aktuelle Liste mehr.
-                    currentList = null;
-
-                    // Rechte Ansicht auf "Keine Liste ausgewählt" zurücksetzen.
-                    refreshTodoPanel();
-                }
-            }
-        });
-
-        renameItem.addActionListener(e -> {
-
-            int selectedIndex = listOverview.getSelectedIndex();
-
-            if (selectedIndex >= 0) {
-
-                TodoList list = app.getLists().get(selectedIndex);
-
-                String newTitle = (String) JOptionPane.showInputDialog(
-                        frame,
-                        "New list name:",
-                        "Rename List",
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        null,
-                        list.getTitle()
-                );
-
-                if (newTitle != null && !newTitle.isBlank()) {
-
-                    // Leerzeichen am Anfang und Ende entfernen,
-                    // damit der neue Listenname sauber gespeichert wird.
-                    newTitle = newTitle.trim();
-
-                    // Die GUI benennt die Liste nicht direkt um,
-                    // sondern gibt die Änderung an den Controller weiter.
-                    controller.renameList(list, newTitle);
-
-                    refreshListOverview();
-                    refreshTodoPanel();
-                }
-            }
-        });
-
-        popupMenu.add(deleteItem);
-        popupMenu.add(renameItem);
+        // Rechtsklick-Menü für Listen erstellen.
+        JPopupMenu popupMenu = createListPopupMenu();
 
         // Vor dem Anzeigen des Rechtsklick-Menüs wird die Liste ausgewählt,
         // auf die der Benutzer tatsächlich geklickt hat.
@@ -221,7 +158,6 @@ public class GUI {
                 // Nur wenn der Klick wirklich auf einer Liste lag,
                 // wird diese Liste ausgewählt.
                 listOverview.setSelectedIndex(index);
-
             }
 
             @Override
@@ -237,12 +173,11 @@ public class GUI {
             }
         });
 
-        // Rechtsklick aktivieren
+        // Rechtsklick-Menü aktivieren.
         listOverview.setComponentPopupMenu(popupMenu);
 
         JScrollPane leftScrollPane = new JScrollPane(listOverview);
 
-        // Button: neue Liste erstellen
         JButton addListButton = new JButton("Create List");
 
         addListButton.addActionListener(e -> createNewList());
@@ -253,39 +188,44 @@ public class GUI {
 
         leftPanel.setPreferredSize(new Dimension(200, 500));
 
-        // -----------------------------
-        // RECHTE SEITE (TodoItems)
-        // -----------------------------
+        return leftPanel;
+    }
 
-        // Panel für Inhalte
+    /**
+     * Erstellt die rechte Hauptansicht mit Titel, Inhalt und Add-Button.
+     */
+    private JPanel createRightPanel() {
+
+        // Panel für die Todo-Inhalte erstellen.
         todoPanel = new JPanel();
         todoPanel.setLayout(new BoxLayout(todoPanel, BoxLayout.Y_AXIS));
 
         JScrollPane rightScrollPane = new JScrollPane(todoPanel);
 
-        // Titel der aktuellen Liste
+        // Titel der aktuell ausgewählten Liste.
         currentListLabel = new JLabel("No list selected");
         currentListLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
-        // Button zum Hinzufügen
+        // Button zum Hinzufügen neuer Aufgaben.
         addItemButton = new JButton("Add Task");
-
         addItemButton.addActionListener(e -> addNewItem());
 
-        // Oberes Panel mit Titel
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(currentListLabel, BorderLayout.WEST);
 
-        // Rechte Hauptseite
         JPanel rightPanel = new JPanel(new BorderLayout());
 
         rightPanel.add(topPanel, BorderLayout.NORTH);
         rightPanel.add(rightScrollPane, BorderLayout.CENTER);
         rightPanel.add(addItemButton, BorderLayout.SOUTH);
 
-        // -----------------------------
-        // LISTENAUSWAHL
-        // -----------------------------
+        return rightPanel;
+    }
+
+    /**
+     * Registriert die Reaktion auf die Auswahl einer Liste.
+     */
+    private void registerListSelectionListener() {
 
         listOverview.addListSelectionListener(e -> {
 
@@ -306,30 +246,146 @@ public class GUI {
                 }
             }
         });
+    }
 
+    /**
+     * Wählt beim Start automatisch die erste Liste aus,
+     * falls gespeicherte Listen vorhanden sind.
+     */
+    private void selectFirstListIfAvailable() {
 
-        // -----------------------------
-        // FRAME ZUSAMMENSETZEN
-        // -----------------------------
-
-        frame.add(leftPanel, BorderLayout.WEST);
-        frame.add(rightPanel, BorderLayout.CENTER);
-
-        // Linke Listenübersicht aktualisieren.
-        refreshListOverview();
-
-        // Wenn gespeicherte Listen vorhanden sind,
-        // wird beim Start automatisch die erste Liste ausgewählt.
         if (!app.getLists().isEmpty()) {
+
+            // Erste vorhandene Liste auswählen.
+            // Dadurch wird auch die rechte Ansicht aktualisiert.
             listOverview.setSelectedIndex(0);
+
         } else {
+
+            // Wenn keine Listen vorhanden sind,
+            // wird der leere Auswahlzustand angezeigt.
             refreshTodoPanel();
         }
+    }
 
-        // Fenster mittig auf dem Bildschirm platzieren.
-        frame.setLocationRelativeTo(null);
+    /**
+     * Erstellt das Rechtsklick-Menü für die Listenübersicht.
+     */
+    private JPopupMenu createListPopupMenu() {
 
-        frame.setVisible(true);
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        JMenuItem deleteItem = new JMenuItem("Delete List");
+        JMenuItem renameItem = new JMenuItem("Rename List");
+
+        deleteItem.addActionListener(e -> deleteSelectedList());
+        renameItem.addActionListener(e -> renameSelectedList());
+
+        popupMenu.add(deleteItem);
+        popupMenu.add(renameItem);
+
+        return popupMenu;
+    }
+
+    /**
+     * Löscht die aktuell ausgewählte Liste nach Bestätigung.
+     */
+    private void deleteSelectedList() {
+
+        int selectedIndex = listOverview.getSelectedIndex();
+
+        if (selectedIndex >= 0) {
+
+            // Die aktuell ausgewählte Liste wird anhand des Index geholt.
+            TodoList list = app.getLists().get(selectedIndex);
+
+            // Vor dem Löschen nachfragen, damit Listen nicht versehentlich entfernt werden.
+            int confirm = JOptionPane.showConfirmDialog(
+                    frame,
+                    "Delete list \"" + list.getTitle() + "\"?",
+                    "Delete List",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+            );
+
+            // Wenn der Benutzer nicht bestätigt,
+            // wird die Liste nicht gelöscht.
+            if (confirm != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            // Die Liste wird über den Controller entfernt.
+            controller.removeList(list);
+
+            // Linke Listenübersicht nach dem Löschen aktualisieren.
+            refreshListOverview();
+
+            // Nach dem Löschen eine passende verbleibende Liste auswählen.
+            selectListAfterDelete(selectedIndex);
+        }
+    }
+
+    /**
+     * Benennt die aktuell ausgewählte Liste um.
+     */
+    private void renameSelectedList() {
+
+        int selectedIndex = listOverview.getSelectedIndex();
+
+        if (selectedIndex >= 0) {
+
+            TodoList list = app.getLists().get(selectedIndex);
+
+            String newTitle = (String) JOptionPane.showInputDialog(
+                    frame,
+                    "New list name:",
+                    "Rename List",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    null,
+                    list.getTitle()
+            );
+
+            if (newTitle != null && !newTitle.isBlank()) {
+
+                // Leerzeichen am Anfang und Ende entfernen,
+                // damit der neue Listenname sauber gespeichert wird.
+                newTitle = newTitle.trim();
+
+                // Die GUI benennt die Liste nicht direkt um,
+                // sondern gibt die Änderung an den Controller weiter.
+                controller.renameList(list, newTitle);
+
+                refreshListOverview();
+                refreshTodoPanel();
+            }
+        }
+    }
+
+    /**
+     * Wählt nach dem Löschen einer Liste eine passende verbleibende Liste aus.
+     */
+    private void selectListAfterDelete(int deletedIndex) {
+
+        if (!app.getLists().isEmpty()) {
+
+            // Wenn die letzte Liste gelöscht wurde,
+            // nehmen wir den neuen letzten Index.
+            int nextIndex = Math.min(deletedIndex, app.getLists().size() - 1);
+
+            // Die nächste Liste wird links ausgewählt.
+            // Dadurch wird auch der ListSelectionListener ausgelöst.
+            listOverview.setSelectedIndex(nextIndex);
+
+        } else {
+
+            // Wenn keine Liste mehr vorhanden ist,
+            // gibt es auch keine aktuelle Liste mehr.
+            currentList = null;
+
+            // Rechte Ansicht auf "No list selected" zurücksetzen.
+            refreshTodoPanel();
+        }
     }
 
     /**
@@ -471,7 +527,7 @@ public class GUI {
     }
 
     /**
-     * Aktualisiert die rechte Todo-Ansicht
+     * Aktualisiert die rechte Todo-Ansicht.
      */
     private void refreshTodoPanel() {
 
@@ -482,32 +538,19 @@ public class GUI {
 
             showNoListSelected();
 
-            todoPanel.revalidate();
-            todoPanel.repaint();
+        } else {
 
-            return;
-        }
+            // Titel der aktuellen Liste anzeigen.
+            currentListLabel.setText(currentList.getTitle());
 
+            if (currentList instanceof CheckboxTodoList checkboxList) {
 
-        // Titel der aktuellen Liste anzeigen
-        currentListLabel.setText(currentList.getTitle());
+                showCheckboxList(checkboxList);
 
-        // -----------------------------------
-        // Checkbox-Liste anzeigen
-        // -----------------------------------
+            } else if (currentList instanceof TextTodoList textList) {
 
-        if (currentList instanceof CheckboxTodoList checkboxList) {
-
-            showCheckboxList(checkboxList);
-        }
-
-        // -----------------------------------
-        // Text-Liste anzeigen
-        // -----------------------------------
-
-        else if (currentList instanceof TextTodoList textList) {
-
-            showTextList(textList);
+                showTextList(textList);
+            }
         }
 
         todoPanel.revalidate();
