@@ -32,7 +32,7 @@ public class CheckboxTodoList extends TodoList {
      * Fügt ein neues TodoItem zur Liste hinzu
      */
     public void addItem(String text) {
-        items.add(new TodoItem(text));
+        items.add(0, new TodoItem(text));
     }
 
     /**
