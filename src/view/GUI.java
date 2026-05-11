@@ -315,9 +315,16 @@ public class GUI {
         frame.add(leftPanel, BorderLayout.WEST);
         frame.add(rightPanel, BorderLayout.CENTER);
 
+        // Linke Listenübersicht aktualisieren.
         refreshListOverview();
 
-        refreshTodoPanel();
+        // Wenn gespeicherte Listen vorhanden sind,
+        // wird beim Start automatisch die erste Liste ausgewählt.
+        if (!app.getLists().isEmpty()) {
+            listOverview.setSelectedIndex(0);
+        } else {
+            refreshTodoPanel();
+        }
 
         // Fenster mittig auf dem Bildschirm platzieren.
         frame.setLocationRelativeTo(null);
