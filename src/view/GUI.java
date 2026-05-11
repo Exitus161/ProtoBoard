@@ -529,21 +529,14 @@ public class GUI {
                     refreshTodoPanel();
                 });
 
-                // Zeilenpanel für eine einzelne Checkbox erstellen.
-                JPanel itemRow = new JPanel(new BorderLayout());
+                // Etwas Abstand um die Checkbox setzen.
+                checkBox.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
 
-                // Die Zeile soll nur so hoch sein wie ihr Inhalt.
-                // Dadurch verteilt BoxLayout die Einträge nicht über die ganze Höhe.
-                itemRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, checkBox.getPreferredSize().height + 8));
+                // Die Checkbox soll nur so hoch sein wie ihr Inhalt.
+                checkBox.setMaximumSize(new Dimension(Integer.MAX_VALUE, checkBox.getPreferredSize().height + 8));
 
-                // Etwas Innenabstand setzen, damit die Zeile luftiger wirkt.
-                itemRow.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
-
-                // Checkbox links in die Zeile legen.
-                itemRow.add(checkBox, BorderLayout.CENTER);
-
-                // Zeile zur Todo-Ansicht hinzufügen.
-                todoPanel.add(itemRow);
+                // Checkbox direkt zur Todo-Ansicht hinzufügen.
+                todoPanel.add(checkBox);
             }
         }
 
