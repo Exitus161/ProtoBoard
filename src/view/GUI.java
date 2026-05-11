@@ -87,6 +87,21 @@ public class GUI {
                 // Die aktuell ausgewählte Liste wird anhand des Index geholt.
                 TodoList list = app.getLists().get(selectedIndex);
 
+                // Vor dem Löschen nachfragen, damit Listen nicht versehentlich entfernt werden.
+                int confirm = JOptionPane.showConfirmDialog(
+                        frame,
+                        "Delete list \"" + list.getTitle() + "\"?",
+                        "Delete List",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE
+                );
+
+                // Wenn der Benutzer nicht bestätigt,
+                // wird die Liste nicht gelöscht.
+                if (confirm != JOptionPane.YES_OPTION) {
+                    return;
+                }
+
                 // Die Liste wird über den Controller entfernt.
                 controller.removeList(list);
 
@@ -545,6 +560,21 @@ public class GUI {
 
                 // Delete
                 deleteItem.addActionListener(e -> {
+
+                    // Vor dem Löschen nachfragen, damit Aufgaben nicht versehentlich entfernt werden.
+                    int confirm = JOptionPane.showConfirmDialog(
+                            frame,
+                            "Delete task \"" + item.getText() + "\"?",
+                            "Delete Task",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.WARNING_MESSAGE
+                    );
+
+                    // Wenn der Benutzer nicht bestätigt,
+                    // wird die Aufgabe nicht gelöscht.
+                    if (confirm != JOptionPane.YES_OPTION) {
+                        return;
+                    }
 
                     // Die GUI löscht das Item nicht direkt,
                     // sondern gibt den Löschwunsch an den Controller weiter.
