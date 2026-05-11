@@ -1,5 +1,5 @@
 package view;
-// Test
+
 import controller.TodoController;
 import model.TextTodoList;
 import model.CheckboxTodoList;
@@ -272,11 +272,18 @@ public class GUI {
             return;
         }
 
-        String text = JOptionPane.showInputDialog("New task:");
+        String text = JOptionPane.showInputDialog("New Entry:");
 
-        if (text == null || text.isEmpty()) {
+        // Wenn der Benutzer abbricht oder nur Leerzeichen eingibt,
+        // wird kein neuer Eintrag erstellt.
+        if (text == null || text.isBlank()) {
             return;
         }
+
+        // Leerzeichen am Anfang und Ende entfernen,
+        // damit der Eintrag sauber gespeichert wird.
+        text = text.trim();
+
 
         // -----------------------------------
         // Checkbox-Liste
@@ -391,6 +398,10 @@ public class GUI {
 
                     if (newText != null && !newText.isBlank()) {
 
+                        // Leerzeichen am Anfang und Ende entfernen,
+                        // damit der bearbeitete Eintrag sauber gespeichert wird.
+                        newText = newText.trim();
+
                         // Die GUI ändert das Item nicht direkt,
                         // sondern gibt die Änderung an den Controller weiter.
                         controller.editItem(item, newText);
@@ -399,6 +410,7 @@ public class GUI {
 
                         refreshTodoPanel();
                     }
+
                 });
 
                 // Delete
@@ -466,10 +478,15 @@ public class GUI {
 
                     for (String line : lines) {
 
-                        // Leere Zeilen ignorieren
-                        if (!line.trim().isEmpty()) {
-                            entries.add(line);
+                        // Leerzeichen am Anfang und Ende entfernen,
+                        // damit jede Zeile sauber gespeichert wird.
+                        String cleanedLine = line.trim();
+
+                        // Leere Zeilen ignorieren.
+                        if (!cleanedLine.isEmpty()) {
+                            entries.add(cleanedLine);
                         }
+
                     }
 
                     // Model aktualisieren
