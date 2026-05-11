@@ -72,13 +72,15 @@ public class PersistenceManager {
                 // Leere Grundstruktur speichern.
                 save(new TodoApp());
 
-                System.out.println("Neue JSON-Datei erstellt.");
+                System.out.println("Created new JSON File.");
             }
 
         } catch (IOException e) {
 
-            // Fehler beim Erstellen der Datei ausgeben.
-            e.printStackTrace();
+            // Creating the storage file failed.
+            // The error message is printed to the console.
+            System.err.println("Storage file could not be created.");
+            System.err.println("Cause: " + e.getMessage());
         }
     }
 
@@ -91,12 +93,16 @@ public class PersistenceManager {
 
             gson.toJson(app, writer);
 
-            System.out.println("Daten gespeichert.");
+            System.out.println("Data saved.");
 
         } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        // Saving failed.
+        // The error message is printed to the console.
+        System.err.println("Todo data could not be saved.");
+        System.err.println("Cause: " + e.getMessage());
     }
+}
 
     /**
      * Lädt die App-Daten aus der JSON-Datei.
@@ -121,15 +127,17 @@ public class PersistenceManager {
                 return new TodoApp();
             }
 
-            System.out.println("Daten geladen.");
+            System.out.println("Data loaded.");
 
             return app;
 
         } catch (IOException | JsonParseException e) {
 
-            // Lesen oder Umwandeln der Datei ist fehlgeschlagen.
-            // Die App startet trotzdem mit einem leeren Zustand.
-            e.printStackTrace();
+            // Reading or parsing the file failed.
+            // The app still starts with an empty state.
+            System.err.println("Todo data could not be loaded.");
+            System.err.println("Starting with an empty todo app.");
+            System.err.println("Cause: " + e.getMessage());
 
             return new TodoApp();
         }
