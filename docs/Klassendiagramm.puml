@@ -1,0 +1,136 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Main {
+  +main(args: String[]): void
+}
+
+class GUI {
+  -controller: TodoController
+  -app: TodoApp
+  -currentList: TodoList
+  -frame: JFrame
+  -listOverview: JList<String>
+  -listModel: DefaultListModel<String>
+  -todoPanel: JPanel
+  -currentListLabel: JLabel
+  -textArea: JTextArea
+  -addItemButton: JButton
+
+  -init(): void
+  -createFrame(): void
+  -createLeftPanel(): JPanel
+  -createRightPanel(): JPanel
+  -createNewList(): void
+  -addNewItem(): void
+  -refreshListOverview(): void
+  -refreshTodoPanel(): void
+}
+
+class TodoController {
+  -app: TodoApp
+  -persistenceManager: PersistenceManager
+
+  +addList(list: TodoList): void
+  +removeList(list: TodoList): void
+  +renameList(list: TodoList, newTitle: String): void
+  +addItem(list: CheckboxTodoList, text: String): void
+  +toggleItem(list: CheckboxTodoList, item: TodoItem): void
+  +editItem(item: TodoItem, newText: String): void
+  +removeItem(list: CheckboxTodoList, item: TodoItem): void
+  +replaceTextEntries(list: TextTodoList, entries: List<String>): void
+  +save(): void
+  +getApp(): TodoApp
+}
+
+class PersistenceManager {
+  -RESOURCE_DIRECTORY: String
+  -FILE_NAME: String
+  -FILE_PATH: String
+  -gson: Gson
+
+  -createFileIfNeeded(): void
+  +save(app: TodoApp): void
+  +load(): TodoApp
+}
+
+class TodoListAdapter {
+  +deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TodoList
+}
+
+class TodoApp {
+  -lists: List<TodoList>
+
+  -ensureListsExist(): void
+  +addList(list: TodoList): void
+  +removeList(list: TodoList): void
+  +getLists(): List<TodoList>
+}
+
+abstract class TodoList {
+  #title: String
+  #type: String
+
+  +TodoList(title: String, type: String)
+  +getTitle(): String
+  +getType(): String
+  +setTitle(title: String): void
+  -cleanTitle(title: String): String
+  -cleanType(type: String): String
+}
+
+class CheckboxTodoList {
+  -items: List<TodoItem>
+
+  -ensureItemsExist(): void
+  +addItem(text: String): void
+  +toggleItem(item: TodoItem): void
+  +removeItem(item: TodoItem): void
+  -sortItems(): void
+  +getItems(): List<TodoItem>
+}
+
+class TextTodoList {
+  -entries: List<String>
+
+  -ensureEntriesExist(): void
+  +getEntries(): List<String>
+  +addEntry(entry: String): void
+  +removeEntry(entry: String): void
+  +setEntries(entries: List<String>): void
+}
+
+class TodoItem {
+  -text: String
+  -completed: boolean
+
+  +TodoItem(text: String)
+  +toggle(): void
+  +getText(): String
+  +setText(text: String): void
+  +isCompleted(): boolean
+  -cleanText(text: String): String
+}
+
+Main ..> PersistenceManager : creates
+Main ..> TodoController : creates
+Main ..> GUI : starts
+
+GUI --> TodoController : uses
+GUI --> TodoApp : reads
+GUI --> TodoList : selected list
+
+TodoController --> TodoApp : manages
+TodoController --> PersistenceManager : uses
+
+PersistenceManager ..> TodoListAdapter : uses
+PersistenceManager ..> TodoApp : saves / loads
+
+TodoApp "1" o-- "0..*" TodoList : contains
+
+TodoList <|-- CheckboxTodoList
+TodoList <|-- TextTodoList
+
+CheckboxTodoList "1" o-- "0..*" TodoItem : contains
+
+@enduml
