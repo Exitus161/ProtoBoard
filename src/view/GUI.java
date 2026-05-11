@@ -205,9 +205,12 @@ public class GUI {
 
         String title = JOptionPane.showInputDialog("Name der Liste:");
 
-        if (title == null || title.isEmpty()) {
+        // Wenn der Benutzer abbricht oder nur Leerzeichen eingibt,
+        // wird keine Liste erstellt.
+        if (title == null || title.isBlank()) {
             return;
         }
+
 
         // Auswahl des Listentyps
         String[] options = {"Checkbox List", "Text List"};
@@ -223,18 +226,27 @@ public class GUI {
                 options[0]
         );
 
+        // Wenn der Benutzer den Dialog abbricht oder schließt,
+        // wird keine neue Liste erstellt.
+        if (choice == JOptionPane.CLOSED_OPTION) {
+            return;
+        }
+
         TodoList newList;
 
-        // Checkbox-Liste
+        // Wenn die erste Option gewählt wurde,
+        // erstellen wir eine Checkbox-Liste.
         if (choice == 0) {
 
             newList = new CheckboxTodoList(title);
 
         } else {
 
-            // Freitext-Liste
+            // Wenn die zweite Option gewählt wurde,
+            // erstellen wir eine Freitext-Liste.
             newList = new TextTodoList(title);
         }
+
 
         controller.addList(newList);
         controller.save();
