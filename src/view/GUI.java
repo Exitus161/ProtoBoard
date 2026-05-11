@@ -42,6 +42,9 @@ public class GUI {
     // Eingabefeld für Textlisten
     private JTextArea textArea;
 
+    // Button zum Hinzufügen neuer Einträge.
+    private JButton addItemButton;
+
     /**
      * Konstruktor
      */
@@ -231,7 +234,7 @@ public class GUI {
         currentListLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
         // Button zum Hinzufügen
-        JButton addItemButton = new JButton("Add Task");
+        addItemButton = new JButton("Add Task");
 
         addItemButton.addActionListener(e -> addNewItem());
 
@@ -279,6 +282,8 @@ public class GUI {
         frame.add(rightPanel, BorderLayout.CENTER);
 
         refreshListOverview();
+
+        refreshTodoPanel();
 
         frame.setVisible(true);
     }
@@ -388,6 +393,9 @@ public class GUI {
 
         else if (currentList instanceof TextTodoList textList) {
 
+            // Textlisten werden direkt im Textfeld bearbeitet.
+            addItemButton.setEnabled(false);
+
             // Die GUI fügt den Eintrag nicht direkt hinzu,
             // sondern gibt die Aktion an den Controller weiter.
             controller.addTextEntry(textList, text);
@@ -420,6 +428,9 @@ public class GUI {
 
             currentListLabel.setText("No list selected");
 
+            // Ohne ausgewählte Liste kann kein neuer Eintrag hinzugefügt werden.
+            addItemButton.setEnabled(false);
+
             todoPanel.revalidate();
             todoPanel.repaint();
 
@@ -434,6 +445,9 @@ public class GUI {
         // -----------------------------------
 
         if (currentList instanceof CheckboxTodoList checkboxList) {
+
+            // Bei Checkbox-Listen werden neue Einträge über den Button hinzugefügt.
+            addItemButton.setEnabled(true);
 
             // Layout für Checkbox-Liste zurücksetzen
             todoPanel.removeAll();
