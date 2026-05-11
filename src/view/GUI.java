@@ -611,6 +611,10 @@ public class GUI {
 
             todoPanel.setLayout(new BorderLayout());
             todoPanel.add(textScrollPane, BorderLayout.CENTER);
+
+            // Cursor direkt ins Textfeld setzen,
+            // sobald Swing die Ansicht fertig aktualisiert hat.
+            SwingUtilities.invokeLater(() -> textArea.requestFocusInWindow());
         }
 
         todoPanel.revalidate();
