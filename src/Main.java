@@ -3,6 +3,9 @@ import controller.TodoController;
 import model.TodoApp;
 import view.GUI;
 
+//hallo
+//moin
+
 import javax.swing.SwingUtilities;
 
 public class Main {
