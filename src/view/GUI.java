@@ -487,11 +487,6 @@ public class GUI {
         // damit der Eintrag sauber gespeichert wird.
         text = text.trim();
 
-
-        // -----------------------------------
-        // Checkbox-Liste
-        // -----------------------------------
-
         // Neue Aufgabe nur bei Checkbox-Listen hinzufügen.
         if (currentList instanceof CheckboxTodoList checkboxList) {
 
