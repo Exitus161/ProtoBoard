@@ -14,6 +14,22 @@ import java.io.File;
 
 /**
  * Verwaltet das Speichern und Laden der App-Daten.
+ * 
+ * Diese Klasse demonstriert das Konzept der Datenpersistenz durch
+ * Serialisierung und Deserialisierung von Java-Objekten in JSON.
+ * 
+ * Sie nutzt die Gson-Library von Google zur automatischen Umwandlung zwischen
+ * Java-Objekten und JSON-Dateien. Dies ermöglicht:
+ * - Datenspeicherung über Programmausführungen hinweg
+ * - Polymorphe Serialisierung durch den {@link controller.TodoListAdapter}
+ *   (verschiedene TodoList-Unterklassen werden korrekt gespeichert/geladen)
+ * - Robuste Fehlerbehandlung bei fehlerhaften oder fehlenden Dateien
+ * 
+ * Speicherpfad: {@code resources/todos.json}
+ * 
+ * @see model.TodoApp
+ * @see model.TodoList
+ * @see controller.TodoListAdapter
  */
 public class PersistenceManager {
 
@@ -30,7 +46,13 @@ public class PersistenceManager {
     private final Gson gson;
 
     /**
-     * Konstruktor
+     * Konstruktor initialisiert den Gson-Serialisierer und erstellt die Datei.
+     * 
+     * Der Gson-Builder wird konfiguriert mit:
+     * - {@link controller.TodoListAdapter} für polymorphe Deserialisierung von TodoList-Unterklassen
+     * - Pretty Printing für lesbare JSON-Formatierung
+     * 
+     * Die Datei wird automatisch erstellt, falls sie noch nicht existiert.
      */
     public PersistenceManager() {
 
@@ -43,8 +65,11 @@ public class PersistenceManager {
     }
 
     /**
-     * Erstellt die JSON-Datei automatisch,
-     * falls sie noch nicht existiert.
+     * Erstellt die JSON-Datei automatisch, falls sie noch nicht existiert.
+     * 
+     * Legt auch Elternordner an, falls diese fehlen.
+     * Bei fehlgeschlagener Dateierstellung wird eine Fehlermeldung geloggt,
+     * aber die Anwendung läuft weiter.
      */
     private void createFileIfNeeded() {
 
@@ -85,7 +110,16 @@ public class PersistenceManager {
     }
 
     /**
-     * Speichert alle App-Daten in die JSON-Datei
+     * Speichert alle App-Daten in die JSON-Datei.
+     * 
+     * Serialisiert das {@link model.TodoApp}-Objekt und alle enthaltenen
+     * {@link model.TodoList}-Unterklassen zu JSON via Gson.
+     * Die Datei wird mit Pretty Printing formatiert für bessere Lesbarkeit.
+     * 
+     * Bei Schreibfehlern wird eine Fehlermeldung geloggt,
+     * aber die Anwendung läuft weiter.
+     * 
+     * @param app Die zu speichernde {@link model.TodoApp} mit allen Listen und Items
      */
     public void save(TodoApp app) {
 
@@ -106,8 +140,16 @@ public class PersistenceManager {
 
     /**
      * Lädt die App-Daten aus der JSON-Datei.
-     * Falls die Datei fehlt, leer oder beschädigt ist,
-     * wird eine neue leere TodoApp zurückgegeben.
+     * 
+     * Deserialisiert die JSON-Datei zu einem {@link model.TodoApp}-Objekt.
+     * Der {@link controller.TodoListAdapter} stellt sicher, dass verschiedene
+     * TodoList-Unterklassen (CheckboxTodoList, TextTodoList) korrekt geladen werden.
+     * 
+     * Fehlertoleranz:
+     * - Falls Datei fehlt, leer oder beschädigt ist: neue leere TodoApp
+     * - Fehlermeldung wird geloggt, Anwendung läuft weiter
+     * 
+     * @return Die geladene {@link model.TodoApp} oder eine neue leere App bei Fehler
      */
     public TodoApp load() {
 

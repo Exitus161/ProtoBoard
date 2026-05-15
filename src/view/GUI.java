@@ -14,9 +14,16 @@ import javax.swing.event.DocumentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-
 /**
- * Haupt-GUI der Todo-App
+ * Haupt-GUI der Todo-App.
+ * 
+ * Diese Klasse implementiert die grafische Benutzeroberfläche und verbindet
+ * die Darstellung mit dem {@link controller.TodoController}. Sie ist für
+ * die Anzeige der Listen und Items sowie für die Interaktion des Benutzers
+ * verantwortlich.
+ * 
+ * Die GUI liest Daten aus dem {@link model.TodoApp}-Model und delegiert
+ * Änderungen an den Controller. Dadurch wird das MVC-Pattern unterstützt.
  */
 public class GUI {
 
@@ -49,7 +56,10 @@ public class GUI {
     private JButton addItemButton;
 
     /**
-     * Konstruktor
+     * Konstruktor.
+     * 
+     * @param controller Der {@link controller.TodoController}, über den
+     *                   Änderungen am Model ausgeführt werden
      */
     public GUI(TodoController controller) {
         this.controller = controller;
@@ -59,7 +69,11 @@ public class GUI {
     }
 
     /**
-     * Initialisiert die GUI
+     * Initialisiert die GUI und zeigt das Hauptfenster an.
+     * 
+     * Diese Methode erstellt das Hauptfenster, die linke Listenübersicht
+     * und die rechte Todo-Ansicht, registriert die Event-Listener und
+     * wählt initial eine vorhandene Liste aus.
      */
     private void init() {
 
@@ -112,6 +126,8 @@ public class GUI {
 
     /**
      * Erstellt die linke Seitenleiste mit Listenübersicht und Erstellen-Button.
+     * 
+     * @return Das linke Panel mit der Listenübersicht
      */
     private JPanel createLeftPanel() {
 
@@ -193,6 +209,8 @@ public class GUI {
 
     /**
      * Erstellt die rechte Hauptansicht mit Titel, Inhalt und Add-Button.
+     * 
+     * @return Das rechte Panel für die Todo-Ansicht
      */
     private JPanel createRightPanel() {
 
@@ -224,6 +242,9 @@ public class GUI {
 
     /**
      * Registriert die Reaktion auf die Auswahl einer Liste.
+     * 
+     * Bei Listenwechsel wird der aktuelle Zustand gespeichert und die rechte
+     * Ansicht aktualisiert.
      */
     private void registerListSelectionListener() {
 
@@ -270,6 +291,8 @@ public class GUI {
 
     /**
      * Erstellt das Rechtsklick-Menü für die Listenübersicht.
+     * 
+     * @return Das Kontextmenü für die Listenansicht
      */
     private JPopupMenu createListPopupMenu() {
 
@@ -364,6 +387,8 @@ public class GUI {
 
     /**
      * Wählt nach dem Löschen einer Liste eine passende verbleibende Liste aus.
+     * 
+     * @param deletedIndex Der Index der zuvor gelöschten Liste
      */
     private void selectListAfterDelete(int deletedIndex) {
 
@@ -389,7 +414,7 @@ public class GUI {
     }
 
     /**
-     * Erstellt eine neue Liste
+     * Erstellt eine neue Liste.
      */
     private void createNewList() {
 
@@ -462,7 +487,7 @@ public class GUI {
     }
 
     /**
-     * Fügt ein neues TodoItem hinzu
+     * Fügt ein neues TodoItem hinzu.
      */
     private void addNewItem() {
 
@@ -497,7 +522,7 @@ public class GUI {
     }
 
     /**
-     * Aktualisiert die linke Listenübersicht
+     * Aktualisiert die linke Listenübersicht.
      */
     private void refreshListOverview() {
 
@@ -553,6 +578,8 @@ public class GUI {
 
     /**
      * Zeigt eine Checkbox-Liste mit allen Aufgaben an.
+     * 
+     * @param checkboxList Die darzustellende {@link model.CheckboxTodoList}
      */
     private void showCheckboxList(CheckboxTodoList checkboxList) {
 
@@ -634,6 +661,8 @@ public class GUI {
 
     /**
      * Öffnet den Dialog zum Bearbeiten einer Checkbox-Aufgabe.
+     * 
+     * @param item Das zu bearbeitende {@link model.TodoItem}
      */
     private void editCheckboxItem(TodoItem item) {
 
@@ -662,6 +691,9 @@ public class GUI {
 
     /**
      * Fragt nach Bestätigung und löscht danach eine Checkbox-Aufgabe.
+     * 
+     * @param checkboxList Die Liste, aus der das Item entfernt wird
+     * @param item Das zu löschende {@link model.TodoItem}
      */
     private void deleteCheckboxItem(CheckboxTodoList checkboxList, TodoItem item) {
 
@@ -688,6 +720,8 @@ public class GUI {
 
     /**
      * Zeigt eine Textliste als frei bearbeitbares Textfeld an.
+     * 
+     * @param textList Die darzustellende {@link model.TextTodoList}
      */
     private void showTextList(TextTodoList textList) {
 

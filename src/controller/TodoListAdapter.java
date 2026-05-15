@@ -9,13 +9,25 @@ import java.lang.reflect.Type;
 
 /**
  * Gson Adapter für polymorphe TodoListen.
- * Entscheidet anhand des Typs,
- * welche Unterklasse geladen werden muss.
+ * 
+ * Diese Klasse implementiert {@link JsonDeserializer<TodoList>} und entscheidet
+ * beim Laden aus JSON anhand des Feldes {@code type}, welche konkrete
+ * {@link model.TodoList}-Unterklasse erzeugt werden soll.
+ * 
+ * Das erlaubt es, in der Persistenzschicht verschiedene Listentypen
+ * (@link model.CheckboxTodoList} und {@link model.TextTodoList}) polymorph zu
+ * handhaben, ohne dass der Verbrauchscode die konkrete Implementierung kennen muss.
  */
 public class TodoListAdapter implements JsonDeserializer<TodoList> {
 
     /**
-     * Deserialisiert eine TodoList anhand des type-Feldes.
+     * Deserialisiert eine TodoList anhand des {@code type}-Feldes.
+     * 
+     * @param json Das JSON-Element, das die TodoList repräsentiert
+     * @param typeOfT Der erwartete Typ ({@code TodoList.class})
+     * @param context Der Deserialisierungs-Kontext von Gson
+     * @return Eine konkrete {@link model.TodoList}-Instanz
+     * @throws JsonParseException Wenn das {@code type}-Feld fehlt oder ein unbekannter Typ angegeben ist
      */
     @Override
     public TodoList deserialize(JsonElement json,

@@ -2,6 +2,12 @@ package model;
 
 /**
  * Repräsentiert ein einzelnes Todo-Element.
+ * 
+ * Ein TodoItem besteht aus einem Aufgabentext und einem Abschluss-Status.
+ * Der Text wird automatisch bereinigt (null → "", Leerzeichen trimmen).
+ * Der Status kann zwischen erledigt und nicht erledigt umgeschaltet werden.
+ * 
+ * @see model.CheckboxTodoList
  */
 public class TodoItem {
 
@@ -12,8 +18,10 @@ public class TodoItem {
     private boolean completed;
 
     /**
-     * Konstruktor: erstellt ein neues TodoItem mit Text
-     * Standard: nicht erledigt
+     * Konstruktor: erstellt ein neues TodoItem mit Text.
+     * Standard: nicht erledigt.
+     * 
+     * @param text Der Aufgabentext (null wird zu leerer String)
      */
     public TodoItem(String text) {
 
@@ -26,19 +34,27 @@ public class TodoItem {
 
 
     /**
-     * Wechselt den Status (erledigt <-> nicht erledigt)
+     * Wechselt den Status zwischen erledigt und nicht erledigt.
      */
     public void toggle() {
         completed = !completed;
     }
 
     /**
-     * Gibt den Text der Aufgabe zurück
+     * Gibt den Text der Aufgabe zurück.
+     * 
+     * @return Der Aufgabentext (nie null)
      */
     public String getText() {
         return text;
     }
 
+    /**
+     * Setzt einen neuen Text für das TodoItem.
+     * Der Text wird automatisch bereinigt (null → "", Leerzeichen trimmen).
+     * 
+     * @param text Der neue Aufgabentext (null wird zu leerer String)
+     */
     public void setText(String text) {
 
         // Text sauber speichern und null vermeiden.
@@ -47,7 +63,9 @@ public class TodoItem {
 
 
     /**
-     * Gibt zurück, ob die Aufgabe erledigt ist
+     * Gibt zurück, ob die Aufgabe erledigt ist.
+     * 
+     * @return true wenn erledigt, false wenn noch offen
      */
     public boolean isCompleted() {
         return completed;
@@ -55,6 +73,12 @@ public class TodoItem {
 
     /**
      * Bereitet Textwerte für TodoItems auf.
+     * 
+     * Konvertiert null-Werte zu leeren Strings und entfernt
+     * führende sowie nachfolgende Leerzeichen.
+     * 
+     * @param text Der zu bereinigende Text (darf null sein)
+     * @return Der bereinigte Text (nie null, minimal "")
      */
     private String cleanText(String text) {
 
